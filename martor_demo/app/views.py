@@ -13,7 +13,7 @@ def home_redirect_view(request):
 
 def overview_view(request):
     
-    return render(request, '%s/overview.html' % theme, context)
+    return render(request, '%s/overview.html')
 
 
 @login_required
