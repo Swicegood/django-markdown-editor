@@ -14,7 +14,7 @@ blocks:
           - cache restore
           - mkdir -p .pip_cache
           - pip install --cache-dir .pip_cache -r requirements.txt
-          - cd martor_demo
+          - cd face_website
           - 'python manage.py makemigrations '
           - python manage.py migrate
           - cd ..
