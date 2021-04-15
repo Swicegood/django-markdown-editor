@@ -9,7 +9,7 @@ def home_redirect_view(request):
 
 
 def overview_view(request):    
-    context = request.GET.copy()
+    context = request.GET.copy() 
     context['ctx']= context
     return render(request, 'overview.html',context)
 

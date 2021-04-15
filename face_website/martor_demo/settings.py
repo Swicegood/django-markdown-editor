@@ -28,24 +28,7 @@ SECRET_KEY = '+1zhx_fpkkyj&z+3n!63fx0)og)@h5^7qyr8e0s%c@p8_&t&+l'
 DEBUG = True
 ALLOWED_HOSTS = ['*']
 
-# Martor Configuration
-MARTOR_THEME = 'bootstrap'  # semantic
-MARTOR_ENABLE_LABEL = True
-MARTOR_ENABLE_CONFIGS = {
-    'emoji': 'true',        # to enable/disable emoji icons.
-    'imgur': 'true',        # to enable/disable imgur/custom uploader.
-    'mention': 'true',      # to enable/disable mention
-    'jquery': 'true',       # to include/revoke jquery (require for admin default django)
-    'living': 'false',      # to enable/disable live updates in preview
-    'spellcheck': 'false',  # to enable/disable spellcheck in form textareas
-    'hljs': 'true',         # to enable/disable hljs highlighting in preview
-}
-MARTOR_TOOLBAR_BUTTONS = [
-    'bold', 'italic', 'horizontal', 'heading', 'pre-code',
-    'blockquote', 'unordered-list', 'ordered-list',
-    'link', 'image-link', 'image-upload', 'emoji',
-    'direct-mention', 'toggle-maximize', 'help'
-]
+
 
 # Application definition
 INSTALLED_APPS = [
@@ -56,7 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    'martor',
+    
     'app',
 ]
 
