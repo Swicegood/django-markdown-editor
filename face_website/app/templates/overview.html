@@ -1,5 +1,11 @@
 {% block content %}
 <h1>Radha Golokananda Face Recognition</h1>
-<h3>{{ctx}}</h3>
+
+<ul>
+    {% for event in all_events %}
+        <li>{{ event.date }}, {{ event.arotik }}, {{ event.radha }}</li>
+    {% endfor %}
+</ul>
+
 {% endblock %}
 
