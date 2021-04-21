@@ -12,10 +12,13 @@ def home_redirect_view(request):
 
 def overview_view(request):    
     event = request.GET.copy() 
-    date_time_str = event.get('date',False)
+    date_time_str = event.get('date',False) 
     if not date_time_str:
-        date_time_str = "08_01_71_01:00:00"
-    date_time_obj = datetime.strptime(date_time_str, '%d_%m_%y_%H:%M:%S')
+        date_time_str = "1971-01-08T08:00:00"
+        all_events = Event.objects.all()
+        return render(request, 'overview.html', {'all_events': all_events})
+    date_time_str = date_time_str[:18]
+    date_time_obj = datetime.strptime(date_time_str, '%Y-%m-%dT%H:%M:%S')
     aroti = get_arotik(date_time_str)
     d = Event(date=date_time_obj, arotik=aroti, face=event.get('face', False))
     d.save()
@@ -23,7 +26,7 @@ def overview_view(request):
     return render(request, 'overview.html', {'all_events': all_events})
 
 def get_arotik(date_time_str):
-    t = date_time_str.split('_')[-1]
+    t = date_time_str.split('T')[-1]
     t = t.split(':')
     start = dt.time(3,25,0)
     end = dt.time(5,0,0)
