@@ -16,7 +16,7 @@ blocks:
           - pip install --cache-dir .pip_cache -r requirements.txt
           - cd face_website
           - 'python manage.py makemigrations '
-          - python manage.py migrate
+          - '# python manage.py migrate'
           - cd ..
       jobs:
         - name: Build

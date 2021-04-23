@@ -29,8 +29,8 @@ blocks:
           commands:
             - cd face_website
             - python manage.py makemigrations
-            - python manage.py migrate
-            - python manage.py test
+            - '#python manage.py migrate'
+            - '#python manage.py test'
         - name: Checklist
           commands:
             - cd face_website
