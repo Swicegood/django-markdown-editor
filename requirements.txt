@@ -4,3 +4,4 @@ requests
 martor
 gunicorn
 mysqlclient
+mysql-python
