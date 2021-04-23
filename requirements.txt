@@ -3,3 +3,4 @@ Markdown
 requests
 martor
 gunicorn
+mysqlclient
