@@ -3,6 +3,4 @@ Markdown
 requests
 martor
 gunicorn
-mysqlclient
-ConfigParser
-mysql-python
+mysqlclient==2.0.0
