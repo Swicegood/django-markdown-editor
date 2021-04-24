@@ -15,7 +15,7 @@ ADD  face_website /opt/app/face_website/
 WORKDIR /opt/app
 RUN pip install -r requirements.txt --cache-dir /opt/app/pip_cache
 RUN chown -R www-data:www-data /opt/app
-RUN pip3 uninstall mysqlclient; pip3 install mysqlclient
+RUN pip3 uninstall mysqlclient -y; pip3 install mysqlclient -y
 EXPOSE 8020
 STOPSIGNAL SIGTERM
 CMD ["/opt/app/start-server.sh"]
