@@ -7,4 +7,4 @@ class Event(models.Model):
     arotik = models.CharField(max_length=33)
     face = models.CharField(max_length=33)
     ontime = models.BooleanField(null=True)
-    # minlate = models.DurationField(default=timedelta())
+    minlate = models.DurationField()

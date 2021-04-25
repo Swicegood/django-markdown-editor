@@ -20,10 +20,37 @@ def overview_view(request):
     date_time_str = date_time_str[:18]
     date_time_obj = datetime.strptime(date_time_str, '%Y-%m-%dT%H:%M:%S')
     aroti = get_arotik(date_time_str)
-    d = Event(date=date_time_obj, arotik=aroti, face=event.get('face', False))
+    d = Event(
+        date=date_time_obj,
+        arotik=aroti,
+        face=event.get('face', False),
+        ontime=is_arotik_ontime(date_time_obj,aroti),
+        minlate=minutes_late(date_time_obj,aroti)
+        )
     d.save()
     all_events = Event.objects.all()
     return render(request, 'overview.html', {'all_events': all_events})
+
+def is_arotik_ontime(date_time_obj, aroti):
+    if minutes_late(date_time_obj, aroti) < dt.timedelta(minutes = 5):
+        return True
+    return False
+
+def minutes_late(date_time_obj, aroti):
+    if aroti=="Mangal":
+        atime = dt.time(4,30,0)
+    if aroti=="Darshan":
+        atime = dt.time(7,15,0)
+    if aroti=="Noon":
+        atime = dt.time(12,30,0)
+    if aroti=="Four O'clock":
+        atime = dt.time(4,15,0)
+    if aroti=="Evening":
+        atime = dt.time(7,0,0)
+    date1 = date_time_obj.date()
+    adatetime = dt.datetime.combine(date1, atime)
+    return date_time_obj - adatetime
+
 
 def get_arotik(date_time_str):
     t = date_time_str.split('T')[-1]
