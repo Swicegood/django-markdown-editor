@@ -4,19 +4,24 @@ from django.contrib import messages
 from app.models import Event
 import datetime as dt
 from datetime import datetime
-
+from django.utils import timezone
 
 def home_redirect_view(request):
     return redirect('overview')
 
 
-def overview_view(request):    
+def overview_view(request):
+    some_day_last_week = timezone.now().date() - dt.timedelta(days=7)
+    monday_of_last_week = some_day_last_week - dt.timedelta(days=(some_day_last_week.isocalendar()[2] - 1))
+    monday_of_this_week = monday_of_last_week + dt.timedelta(days=7)    
     event = request.GET.copy() 
     date_time_str = event.get('date',False) 
     if not date_time_str:
         date_time_str = "1971-01-08T08:00:00"
         all_events = Event.objects.all()
-        return render(request, 'overview.html', {'all_events': all_events})
+        past_week_events = all_events.filter(date__gte=some_day_last_week)
+        past_week_of_days = break_into_days(past_week_events)
+        return render(request, 'overview.html', {'all_events': all_events, 'past_week_of_days':past_week_of_days})
     date_time_str = date_time_str[:18]
     date_time_obj = datetime.strptime(date_time_str, '%Y-%m-%dT%H:%M:%S')
     aroti = get_arotik(date_time_str)
@@ -28,8 +33,21 @@ def overview_view(request):
         minlate=minutes_late(date_time_obj,aroti)
         )
     d.save()
-    all_events = Event.objects.all()
-    return render(request, 'overview.html', {'all_events': all_events})
+    all_events = Event.objects.all()    
+    past_week_events = all_events.filter(date__gte=some_day_last_week)
+    return render(request, 'overview.html', {'all_events': all_events, 'past_week_events':past_week_events})
+
+
+def break_into_days(past_week_events):
+    past_week_of_days = []
+    start = past_week_events[0].date
+    end = past_week_events[0].date
+    for i in range(7):
+        end += dt.timedelta(days=1)
+        past_week_of_days.append(past_week_events.filter(date__gte=start, date__lt=end))
+        start = end
+    return past_week_of_days
+
 
 def is_arotik_ontime(date_time_obj, aroti):
     if minutes_late(date_time_obj, aroti) < dt.timedelta(minutes = 5):
@@ -44,9 +62,9 @@ def minutes_late(date_time_obj, aroti):
     if aroti=="Noon":
         atime = dt.time(12,30,0)
     if aroti=="Four O'clock":
-        atime = dt.time(4,15,0)
+        atime = dt.time(16,15,0)
     if aroti=="Evening":
-        atime = dt.time(7,0,0)
+        atime = dt.time(19,0,0)
     date1 = date_time_obj.date()
     adatetime = dt.datetime.combine(date1, atime)
     return date_time_obj - adatetime

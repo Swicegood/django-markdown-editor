@@ -12,6 +12,45 @@
 </head>
 {% block content %}
 <h1>Radha Golokananda Face Recognition</h1>
+<div class="container"></div>
+{% load event_tag %}
+  <div class="row mb-0 text-light bg-dark">
+  {% for day in past_week_of_days %}
+    {% get_event day as event_day %}
+    <div class="col-sm mb-0">
+        {{ event_day }}
+    </div>     
+  {% endfor %}
+    <div class="col-sm mb-0">
+      Indicates:
+    </div>
+  </div>
+{% with "Mangal,Darshan,Noon,Four O'clock,Evening" as arotiks %}
+  {% for aroti in arotiks|split %}
+    <div class="row">
+        <div class="mb-0 mt-0 text-center text-info bg-dark">
+        {{ aroti }}
+        </div>
+    </div>       
+    <div class="row">
+    {% for day in past_week_of_days %} 
+      {% check_if_event_ontime day aroti as ontime %}
+      <div class="col-sm text-light bg-dark">
+      {% if ontime %}
+             <i class="bi-check2-circle" style="font-size: larger; color:forestgreen;"></i>
+             {% else %}
+             <i class="bi-x" style="font-size:large;   color: red;"></i>
+      {% endif %}
+      </div>
+    {% endfor %}
+      <div class="col-sm text-light bg-dark">
+          Ontime?
+      </div>
+    
+    </div>
+  {% endfor %}
+{% endwith %}
+
 <div class='row'>
     <div class="mb-3 text-center col-sm-12">
          <h4 class="d-inline mr-2">All Events</h4>
@@ -44,7 +83,6 @@
                                    <td>{{ event.date }}</td>
                                    <td>{{ event.arotik }}</td> 
                                    <td>{{ event.face }}</td>
-                                   <td>{{ event.ontime }}</td>
                                    <td>
                                        <span class="bi-arrow-up-right mouse">
                                           
