@@ -7,53 +7,73 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css">
   <link href="{% static 'face_website/css/bootstrap.min.css' %}" type="text/css" media="all" rel="stylesheet" />
-  
+  <style type="text/css">
+    body { background: black !important; } /* Adding !important forces the browser to overwrite the default style applied by Bootstrap */
+ </style>
   {% block css %}{% endblock %}
 </head>
 {% block content %}
-<h1>Radha Golokananda Face Recognition</h1>
-<div class="container"></div>
+<h1 style="color: whitesmoke;">Radha Golokananda Face Recognition</h1>
+<div class="container bg-dark"></div>
 {% load event_tag %}
-  <div class="row mb-0 text-light bg-dark">
+  <div class="row mb-0  text-light bg-dark">
   {% for day in past_week_of_days %}
     {% get_event day as event_day %}
-    <div class="col-sm mb-0">
-        {{ event_day }}
-    </div>     
-  {% endfor %}
-    <div class="col-sm mb-0">
+      
+      <div class="col-sm gy-1 bg-secondary mb-0">
+          {{ event_day }}
+      </div>     
+  {% endfor %}   
+    <div class="col-sm mb-0 gy-1 bg-secondary mb-0">
       Indicates:
     </div>
   </div>
 {% with "Mangal,Darshan,Noon,Four O'clock,Evening" as arotiks %}
   {% for aroti in arotiks|split %}
-    <div class="row">
-        <div class="mb-0 mt-0 text-center text-info bg-dark">
-        {{ aroti }}
+    <div class="row text-center text-info bg-dark gy-1 bg-secondary" >
+        <div class="text-center text-info bg-dark gy-1 bg-secondary">
+          {{ aroti }}
         </div>
     </div>       
-    <div class="row">
-    {% for day in past_week_of_days %} 
-      {% check_if_event_ontime day aroti as ontime %}
+    <div class="row  bg-secondary">
+      {% for day in past_week_of_days %} 
+        {% get_event day as event_day %}
+          {% check_if_event_ontime day aroti as ontime %}
+          
+            <div class="col-sm text-light bg-dark">
+               {% if ontime %}
+                 <i class="bi-check2-circle" style="font-size: larger; color:forestgreen;"></i>
+               {% else %}
+                 <i class="bi-x" style="font-size:large;   color: red;"></i>
+               {% endif %}
+            </div>       
+        
+      {% endfor %}
       <div class="col-sm text-light bg-dark">
-      {% if ontime %}
-             <i class="bi-check2-circle" style="font-size: larger; color:forestgreen;"></i>
-             {% else %}
-             <i class="bi-x" style="font-size:large;   color: red;"></i>
-      {% endif %}
-      </div>
-    {% endfor %}
-      <div class="col-sm text-light bg-dark">
-          Ontime?
-      </div>
+        On-time Status
+      </div>  
+    </div>  
+    <div class="row ">      
+      {% for day in past_week_of_days %}
+        {% get_event day as event_day %}            
+          {% get_minlate day aroti as minlate %} 
+            <div class="col-sm text-light bg-dark ">
+              {{ minlate }}      
+            </div>        
+        
+      {% endfor %}
     
-    </div>
+        <div class="col-sm text-light bg-dark">
+            Minutes Late
+        </div>    
+    </div>   
+     
   {% endfor %}
 {% endwith %}
 
 <div class='row'>
     <div class="mb-3 text-center col-sm-12">
-         <h4 class="d-inline mr-2">All Events</h4>
+         <h4 class="d-inline mr-2 text-light">All Events</h4>
          <a class="bi-chevron-up" data-bs-toggle="collapse" href="#eventsTable" role="button" aria-expanded="false" aria-controls="eventsTable"></a>
          
     </div>

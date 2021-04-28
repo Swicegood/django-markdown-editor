@@ -19,6 +19,16 @@ def get_event(one_days_events):
     else:
         return None
 
+@register.simple_tag
+def get_minlate(one_days_events, arotik):
+    one_arotis_events = one_days_events.filter(arotik=arotik)
+    if one_arotis_events:
+        s = one_arotis_events[0].minlate.seconds
+        return int(s/60)
+    else:
+        return None
+
+
 @register.filter
 @stringfilter
 def split(value):

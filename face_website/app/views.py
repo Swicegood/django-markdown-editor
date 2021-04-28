@@ -44,7 +44,9 @@ def break_into_days(past_week_events):
     end = past_week_events[0].date
     for i in range(7):
         end += dt.timedelta(days=1)
-        past_week_of_days.append(past_week_events.filter(date__gte=start, date__lt=end))
+        day = past_week_events.filter(date__gte=start, date__lt=end)
+        if day:
+            past_week_of_days.append(day)
         start = end
     return past_week_of_days
 
