@@ -32,7 +32,7 @@
   {% for aroti in arotiks|split %}
     <div class="row text-center text-info bg-dark gy-1 bg-secondary" >
         <div class="text-center text-info bg-dark gy-1 bg-secondary">
-          {{ aroti }}
+          <h3>{{ aroti }}</h3>
         </div>
     </div>       
     <div class="row  bg-secondary">
@@ -44,12 +44,12 @@
                {% if ontime %}
                  <i class="bi-check2-circle" style="font-size: larger; color:forestgreen;"></i>
                {% else %}
-                 <i class="bi-x" style="font-size:large;   color: red;"></i>
+                 <i class="bi-x" style="font-size:xx-large;   color: red;"></i>
                {% endif %}
             </div>       
         
       {% endfor %}
-      <div class="col-sm text-light bg-dark">
+      <div class="col-sm text-muted bg-dark ">
         On-time Status
       </div>  
     </div>  
@@ -63,7 +63,7 @@
         
       {% endfor %}
     
-        <div class="col-sm text-light bg-dark">
+        <div class="col-sm text-muted bg-dark">
             Minutes Late
         </div>    
     </div>   
@@ -74,7 +74,7 @@
 <div class='row'>
     <div class="mb-3 text-center col-sm-12">
          <h4 class="d-inline mr-2 text-light">All Events</h4>
-         <a class="bi-chevron-up" data-bs-toggle="collapse" href="#eventsTable" role="button" aria-expanded="false" aria-controls="eventsTable"></a>
+         <a class="bi-chevron-up" style="font-size: large; color: wheat;"  data-bs-toggle="collapse" href="#eventsTable" role="button" aria-expanded="false" aria-controls="eventsTable"></a>
          
     </div>
     <div class="my-1 text-center">
@@ -82,7 +82,7 @@
             Auto refresh: On
         </span>
     </div>
-    <div class="collapse show" style>
+    
         <div class="row">
             <div id="eventsTable" class="col-sm-12">
                 <div class="table-responsive">
@@ -116,7 +116,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    
 </div>
 
 
