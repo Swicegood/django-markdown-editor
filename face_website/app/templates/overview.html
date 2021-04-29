@@ -14,33 +14,33 @@
 </head>
 {% block content %}
 <h1 style="color: whitesmoke;">Radha Golokananda Face Recognition</h1>
-<div class="container bg-dark"></div>
+<div class="container bg-black  "></div>
 {% load event_tag %}
-  <div class="row mb-0  text-light bg-dark">
+  <div class="row mb-0  text-light bg-black">
   {% for day in past_week_of_days %}
     {% get_event day as event_day %}
       
-      <div class="col-sm gy-1 bg-secondary mb-0">
-          {{ event_day }}
+      <div class="gy-1 col bg-secondary mb-0">
+        {{ event_day }}
       </div>     
   {% endfor %}   
-    <div class="col-sm mb-0 gy-1 bg-secondary mb-0">
+    <div class="mb-0 col gy-1 bg-secondary mb-0 gx-5 ">
       Indicates:
     </div>
   </div>
 {% with "Mangal,Darshan,Noon,Four O'clock,Evening" as arotiks %}
   {% for aroti in arotiks|split %}
-    <div class="row text-center text-info bg-dark gy-1 bg-secondary" >
-        <div class="text-center text-info bg-dark gy-1 bg-secondary">
-          <h3>{{ aroti }}</h3>
+    <div class="row" >
+        <div class="text-center text-muted bg-dark gy-1 bg-secondary">
+          <h6>{{ aroti }}</h6>
         </div>
     </div>       
-    <div class="row  bg-secondary">
+    <div class="row bg-black">
       {% for day in past_week_of_days %} 
         {% get_event day as event_day %}
           {% check_if_event_ontime day aroti as ontime %}
           
-            <div class="col-sm text-light bg-dark">
+            <div class="col text-light  gy-1  bg-dark">
                {% if ontime %}
                  <i class="bi-check2-circle" style="font-size: larger; color:forestgreen;"></i>
                {% else %}
@@ -49,7 +49,7 @@
             </div>       
         
       {% endfor %}
-      <div class="col-sm text-muted bg-dark ">
+      <div class="col gy-1 text-muted bg-dark ">
         On-time Status
       </div>  
     </div>  
@@ -57,13 +57,13 @@
       {% for day in past_week_of_days %}
         {% get_event day as event_day %}            
           {% get_minlate day aroti as minlate %} 
-            <div class="col-sm text-light bg-dark ">
+            <div class="col text-light bg-dark ">
               {{ minlate }}      
             </div>        
         
       {% endfor %}
     
-        <div class="col-sm text-muted bg-dark">
+        <div class="col text-muted bg-dark">
             Minutes Late
         </div>    
     </div>   
