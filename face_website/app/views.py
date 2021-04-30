@@ -61,6 +61,7 @@ def is_arotik_ontime(date_time_obj, aroti):
     return False
 
 def minutes_late(date_time_obj, aroti):
+    atime = None
     if aroti=="Mangal":
         atime = dt.time(4,30,0)
     if aroti=="Darshan":
@@ -72,6 +73,8 @@ def minutes_late(date_time_obj, aroti):
     if aroti=="Evening":
         atime = dt.time(19,0,0)
     date1 = date_time_obj.date()
+    if not atime:
+        return dt.timedelta(seconds=0)
     adatetime = dt.datetime.combine(date1, atime)
     return date_time_obj - adatetime
 
