@@ -1,42 +1,46 @@
+from django.http import HttpResponseRedirect, HttpResponse
 from django.conf import settings
 from django.shortcuts import (render, redirect)
 from django.contrib import messages
-from app.models import Event
+from app.models import Event, EventForm
 import datetime as dt
 from datetime import datetime
 from django.utils import timezone
+from django.views.decorators.csrf import csrf_exempt
+
+
 
 def home_redirect_view(request):
     return redirect('overview')
 
-
+@csrf_exempt
 def overview_view(request):
     some_day_last_week = timezone.now().date() - dt.timedelta(days=7)
     monday_of_last_week = some_day_last_week - dt.timedelta(days=(some_day_last_week.isocalendar()[2] - 1))
     monday_of_this_week = monday_of_last_week + dt.timedelta(days=7)    
-    event = request.GET.copy() 
-    date_time_str = event.get('date',False) 
-    if not date_time_str:
-        date_time_str = "1971-01-08T08:00:00"
-        all_events = Event.objects.all()
-        past_week_events = all_events.filter(date__gte=some_day_last_week)
-        past_week_of_days = break_into_days(past_week_events)
-        return render(request, 'overview.html', {'all_events': all_events, 'past_week_of_days':past_week_of_days})
-    date_time_str = date_time_str[:18]
-    date_time_obj = datetime.strptime(date_time_str, '%Y-%m-%dT%H:%M:%S')
-    aroti = get_arotik(date_time_str)
-    d = Event(
-        date=date_time_obj,
-        arotik=aroti,
-        face=event.get('face', False),
-        ontime=is_arotik_ontime(date_time_obj,aroti),
-        minlate=minutes_late(date_time_obj,aroti)
-        )
-    d.save()
-    all_events = Event.objects.all()    
-    past_week_events = all_events.filter(date__gte=some_day_last_week)
-    return render(request, 'overview.html', {'all_events': all_events, 'past_week_events':past_week_events})
+    date_time_str = None
+    if request.method == 'POST':
+        event = request.POST.copy() 
+        date_time_str = event.get('date',False) 
+        date_time_str = date_time_str[:18]
+        date_time_obj = datetime.strptime(date_time_str, '%Y-%m-%dT%H:%M:%S')
+        aroti = get_arotik(date_time_str)
+        event['date']=date_time_obj
+        event['arotik']=aroti
+        event['ontime']=is_arotik_ontime(date_time_obj,aroti)
+        event['minlate']=minutes_late(date_time_obj,aroti)
+        form = EventForm(event, request.FILES)
+        if form.is_valid():
+            # file is saved
+            form.save()
+            return HttpResponseRedirect('/success/')
 
+    all_events = Event.objects.all()
+    past_week_events = all_events.filter(date__gte=some_day_last_week)
+    past_week_of_days = break_into_days(past_week_events)
+    return render(request, 'overview.html', {'all_events': all_events, 'past_week_of_days':past_week_of_days})
+  
+ 
 
 def break_into_days(past_week_events):
     past_week_of_days = []
@@ -106,3 +110,6 @@ def time_in_range(start, end, x):
         return start <= x <= end
     else:
         return start <= x or x <= end
+
+def success_view(request):    
+    return HttpResponse("Success!")
