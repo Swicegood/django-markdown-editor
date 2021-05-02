@@ -15,9 +15,7 @@ def home_redirect_view(request):
 
 @csrf_exempt
 def overview_view(request):
-    some_day_last_week = timezone.now().date() - dt.timedelta(days=7)
-    monday_of_last_week = some_day_last_week - dt.timedelta(days=(some_day_last_week.isocalendar()[2] - 1))
-    monday_of_this_week = monday_of_last_week + dt.timedelta(days=7)    
+    some_day_last_week = timezone.now().date() - dt.timedelta(days=6)
     date_time_str = None
     if request.method == 'POST':
         event = request.POST.copy() 
@@ -68,7 +66,10 @@ def minutes_late(date_time_obj, aroti):
     if aroti=="Noon":
         atime = dt.time(12,30,0)
     if aroti=="Four O'clock":
-        atime = dt.time(16,15,0)
+        if date_time_obj.weekday() == 6:
+            atime = dt.time(16,0,0)
+        else:
+            atime = dt.time(16,15,0)
     if aroti=="Evening":
         atime = dt.time(19,0,0)
     date1 = date_time_obj.date()

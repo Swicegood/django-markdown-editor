@@ -15,7 +15,7 @@ def check_if_event_ontime(one_days_events, aroti):
 @register.simple_tag
 def get_event(one_days_events):
     if one_days_events:
-        return one_days_events[0].date.strftime('%b %d')
+        return one_days_events[0].date.strftime('%a, %b %d')
     else:
         return None
 
@@ -31,7 +31,11 @@ def get_minlate(one_days_events, arotik):
 @register.simple_tag
 def get_thumbnail(one_days_events, arotik):
     one_arotis_events = one_days_events.filter(arotik=arotik)
-    return one_arotis_events[0].upload
+    day = None
+    try:
+        day = one_arotis_events[0]
+    finally:
+        return day
 
 
 @register.filter

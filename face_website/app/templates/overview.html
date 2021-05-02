@@ -50,7 +50,7 @@
                {% if ontime %}
                  <i class="bi-check2-circle" style="font-size: larger; color:forestgreen;"></i>
                {% else %}
-                 <i class="bi-x" style="font-size:xx-large;   color: red;"></i>
+                 <i class="bi-x"  style="color: red;"></i>
                {% endif %}
             </div>       
         
@@ -77,10 +77,15 @@
       {% for day in past_week_of_days %}
         {% get_event day as event_day %}            
           {% get_thumbnail day aroti as thumbnail %} 
-            <div class="col bg-dark ">
-                  <img src={{ MEDIA_URL }}{{ thumbnail }} height='40px'>
-            </div>        
-        
+            {% if thumbnail %}
+              <div class="col bg-dark " id=tmb{{ thumbnail.pk }} data-pic={{ MEDIA_URL }}{{ thumbnail.upload }}>
+                  <img src={{ MEDIA_URL }}{{ thumbnail.upload }} height='40px' style="border-radius: 5%;"  role="button" data-bs-toggle="modal" data-bs-target="#previewPic">
+              </div>
+            {% else %}
+              <div class="col bg-dark">
+                  <a style="color: cornsilk;">No Pic Yet</a>
+              </div>
+            {% endif %}   
       {% endfor %}
     
         <div class="col text-muted bg-dark">
@@ -168,8 +173,20 @@
         
     
 </div>
+<script type="text/javascript">  
+
+
+  $(document).on("click", '[id^=tmb]', function () {
+     console.log("clicked!")
+      const imgPhoto = document.getElementById(this.id).getAttribute('data-pic')
+      var str = "<img src="+imgPhoto+" height='200px'>" 
+          
+      console.log(str)
+      $("#modal_body").html(str);
+  });
+</script>
 <script type="text/javascript">
-  const modalBody = document.getElementById('modal-body')
+ 
   
 
   $(document).on("click", '[id^=pic]', function () {
