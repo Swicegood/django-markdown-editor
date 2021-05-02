@@ -3,8 +3,11 @@
 <html lang="en-us">
 <head>
   <title>{% block title %}Face Website{% endblock %}</title>
-  <meta http-equiv="refresh" content="30">
+<!--<meta http-equiv="refresh" content="30">-->
+  <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Option 1: Bootstrap Bundle with Popper -->
+  <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css">
   <link href="{% static 'face_website/css/bootstrap.min.css' %}" type="text/css" media="all" rel="stylesheet" />
   <style type="text/css">
@@ -13,6 +16,9 @@
   {% block css %}{% endblock %}
 </head>
 {% block content %}
+<body>
+  <script type="text/javascript" src="{% static 'face_website/js/bootstrap.bundle.js' %}"></script>
+
 <h1 style="color: whitesmoke;">Radha Golokananda Face Recognition</h1>
 <div class="container bg-black  "></div>
 {% load event_tag %}
@@ -67,7 +73,20 @@
             Minutes Late
         </div>    
     </div>   
-     
+    <div class="row ">      
+      {% for day in past_week_of_days %}
+        {% get_event day as event_day %}            
+          {% get_thumbnail day aroti as thumbnail %} 
+            <div class="col bg-dark ">
+                  <img src={{ MEDIA_URL }}{{ thumbnail }} height='40px'>
+            </div>        
+        
+      {% endfor %}
+    
+        <div class="col text-muted bg-dark">
+            
+        </div>    
+    </div>   
   {% endfor %}
 {% endwith %}
 
@@ -104,22 +123,66 @@
                                    <td>{{ event.arotik }}</td> 
                                    <td>{{ event.face }}</td>
                                    <td>
-                                       <span class="bi-arrow-up-right mouse">
-                                          
-                                       </span>
+                                      <!-- Button to invoke the modal -->
+                                      <span role="button" class="bi-arrow-up-right" data-bs-toggle="modal" data-pic={{ MEDIA_URL }}{{ event.upload }}
+                                      data-bs-target="#previewPic"
+                                      id=pic{{ forloop.counter }}>
+                                   </span>
+                                       
                                    </td>
                                </tr>
                                                                
                             {% endfor %}                            
                         </tbody>
                     </table>
+                            <!-- Modal -->
+                        <div class="modal fade" id="previewPic" tabindex="-1" 
+                        aria-labelledby="exampleModalLabel" 
+                        aria-hidden="true">
+                          
+                        <div class="modal-dialog">
+                            <div class="modal-content" style="border-radius: 5%;">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" 
+                                        id="exampleModalLabel">
+                                        Screenshot
+                                    </h5>
+                                      
+                                 
+                                </div>
+
+                                <div class="modal-body text-center">
+
+                                    <!-- Data passed is displayed 
+                                        in this part of the 
+                                        modal body -->
+                                    <h6 id="modal_body"></h6>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
+        
     
 </div>
-{{ csrf_token }}
+<script type="text/javascript">
+  const modalBody = document.getElementById('modal-body')
+  
 
+  $(document).on("click", '[id^=pic]', function () {
+     console.log("clicked!")
+      const imgPhoto = document.getElementById(this.id).getAttribute('data-pic')
+      var str = "<img src="+imgPhoto+" height='200px'>" 
+          
+      
+      $("#modal_body").html(str);
+  });
+</script>
+{{ csrf_token }}
+</body>
 {% endblock %} 
-<script type="text/javascript" src="{% static 'face_website/js/bootstrap.bundle.js' %}"></script>
+
 {% block js %}{% endblock %}

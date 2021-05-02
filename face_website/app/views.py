@@ -40,7 +40,6 @@ def overview_view(request):
     past_week_of_days = break_into_days(past_week_events)
     return render(request, 'overview.html', {'all_events': all_events, 'past_week_of_days':past_week_of_days})
   
- 
 
 def break_into_days(past_week_events):
     past_week_of_days = []

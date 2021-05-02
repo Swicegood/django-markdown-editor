@@ -28,6 +28,11 @@ def get_minlate(one_days_events, arotik):
     else:
         return None
 
+@register.simple_tag
+def get_thumbnail(one_days_events, arotik):
+    one_arotis_events = one_days_events.filter(arotik=arotik)
+    return one_arotis_events[0].upload
+
 
 @register.filter
 @stringfilter
