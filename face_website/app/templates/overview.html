@@ -8,8 +8,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!-- Option 1: Bootstrap Bundle with Popper -->
   <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
+  <script src="https://unpkg.com/bootstrap-table@1.18.3/dist/bootstrap-table.min.js"></script>
+  <script src="https://unpkg.com/bootstrap-table@1.18.3/dist/extensions/auto-refresh/bootstrap-table-auto-refresh.min.js"></script>
+   <!-- Note: when deploying, replace "development.js" with "production.min.js". -->
+   <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
+   <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
+   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+   <script
+  src="https://unpkg.com/react-bootstrap@next/dist/react-bootstrap.min.js"
+  crossorigin></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css">
+  <link href="https://unpkg.com/bootstrap-table@1.18.3/dist/bootstrap-table.min.css" rel="stylesheet">
   <link href="{% static 'face_website/css/bootstrap.min.css' %}" type="text/css" media="all" rel="stylesheet" />
+  <link href="{% static 'face_website/css/custom.css' %}" type="text/css" media="all" rel="stylesheet" />
   <style type="text/css">
     body { background: black !important; } /* Adding !important forces the browser to overwrite the default style applied by Bootstrap */
  </style>
@@ -21,155 +32,112 @@
 
 <h1 style="color: whitesmoke;">Radha Golokananda Face Recognition</h1>
 <div class="container bg-black  "></div>
-{% load event_tag %}
-  <div class="row mb-0  text-light bg-black">
-  {% for day in past_week_of_days %}
-    {% get_event day as event_day %}
-      
-      <div class="gy-1 col bg-secondary mb-0">
-        {{ event_day }}
-      </div>     
-  {% endfor %}   
-    <div class="mb-0 col gy-1 bg-secondary mb-0 gx-5 ">
-      Indicates:
+<div class="row">
+  {% load event_tag %}
+    <div class="row mb-0  text-light bg-black">
+    {% for day in past_week_of_days %}
+      {% get_event day as event_day %}
+        
+        <div class="gy-1 col bg-secondary mb-0">
+          {{ event_day }}
+        </div>     
+    {% endfor %}   
+      <div class="mb-0 col gy-1 bg-secondary mb-0 gx-5 ">
+        Indicates:
+      </div>
     </div>
-  </div>
-{% with "Mangal,Darshan,Noon,Four O'clock,Evening" as arotiks %}
-  {% for aroti in arotiks|split %}
-    <div class="row" >
-        <div class="text-center text-muted bg-dark gy-1 bg-secondary">
-          <h6>{{ aroti }}</h6>
-        </div>
-    </div>       
-    <div class="row bg-black">
-      {% for day in past_week_of_days %} 
-        {% get_event day as event_day %}
-          {% check_if_event_ontime day aroti as ontime %}
-          
-            <div class="col text-light  gy-1  bg-dark">
-               {% if ontime %}
-                 <i class="bi-check2-circle" style="font-size: larger; color:forestgreen;"></i>
-               {% else %}
-                 <i class="bi-x"  style="color: red;"></i>
-               {% endif %}
-            </div>       
-        
-      {% endfor %}
-      <div class="col gy-1 text-muted bg-dark ">
-        On-time Status
-      </div>  
-    </div>  
-    <div class="row ">      
-      {% for day in past_week_of_days %}
-        {% get_event day as event_day %}            
-          {% get_minlate day aroti as minlate %} 
-            <div class="col text-light bg-dark ">
-              {{ minlate }}      
-            </div>        
-        
-      {% endfor %}
-    
-        <div class="col text-muted bg-dark">
-            Minutes Late
-        </div>    
-    </div>   
-    <div class="row ">      
-      {% for day in past_week_of_days %}
-        {% get_event day as event_day %}            
-          {% get_thumbnail day aroti as thumbnail %} 
-            {% if thumbnail %}
-              <div class="col bg-dark " id=tmb{{ thumbnail.pk }} data-pic={{ MEDIA_URL }}{{ thumbnail.upload }}>
-                  <img src={{ MEDIA_URL }}{{ thumbnail.upload }} height='40px' style="border-radius: 5%;"  role="button" data-bs-toggle="modal" data-bs-target="#previewPic">
-              </div>
-            {% else %}
-              <div class="col bg-dark">
-                  <a style="color: cornsilk;">No Pic Yet</a>
-              </div>
-            {% endif %}   
-      {% endfor %}
-    
-        <div class="col text-muted bg-dark">
+  {% with "Mangal,Darshan,Noon,Four O'clock,Evening" as arotiks %}
+    {% for aroti in arotiks|split %}
+      <div class="row" >
+          <div class="text-center text-muted bg-dark gy-1 bg-secondary">
+            <h6>{{ aroti }}</h6>
+          </div>
+      </div>       
+      <div class="row bg-black">
+        {% for day in past_week_of_days %} 
+          {% get_event day as event_day %}
+            {% check_if_event_ontime day aroti as ontime %}
             
-        </div>    
-    </div>   
-  {% endfor %}
-{% endwith %}
-
-<div class='row'>
-    <div class="mb-3 text-center col-sm-12">
-         <h4 class="d-inline mr-2 text-light">All Events</h4>
-         <a class="bi-chevron-up" style="font-size: large; color: wheat;"  data-bs-toggle="collapse" href="#eventsTable" role="button" aria-expanded="false" aria-controls="eventsTable"></a>
-         
-    </div>
-    <div class="my-1 text-center">
-        <span class="text-muted">
-            Auto refresh: On
-        </span>
-    </div>
-    
-        <div class="row">
-            <div id="eventsTable" class="col-sm-12">
-                <div class="table-responsive">
-                    <table class='table table-dark'>
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Date/Time</th>
-                                <th>Arotik</th>
-                                <th>Face(s) Detected</th>
-                                <th>More</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for event in all_events reversed %}
-                               <tr>
-                                   <td>{{event.pk}}</td>
-                                   <td>{{ event.date }}</td>
-                                   <td>{{ event.arotik }}</td> 
-                                   <td>{{ event.face }}</td>
-                                   <td>
-                                      <!-- Button to invoke the modal -->
-                                      <span role="button" class="bi-arrow-up-right" data-bs-toggle="modal" data-pic={{ MEDIA_URL }}{{ event.upload }}
-                                      data-bs-target="#previewPic"
-                                      id=pic{{ forloop.counter }}>
-                                   </span>
-                                       
-                                   </td>
-                               </tr>
-                                                               
-                            {% endfor %}                            
-                        </tbody>
-                    </table>
-                            <!-- Modal -->
-                        <div class="modal fade" id="previewPic" tabindex="-1" 
-                        aria-labelledby="exampleModalLabel" 
-                        aria-hidden="true">
-                          
-                        <div class="modal-dialog">
-                            <div class="modal-content" style="border-radius: 5%;">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" 
-                                        id="exampleModalLabel">
-                                        Screenshot
-                                    </h5>
-                                      
-                                 
-                                </div>
-
-                                <div class="modal-body text-center">
-
-                                    <!-- Data passed is displayed 
-                                        in this part of the 
-                                        modal body -->
-                                    <h6 id="modal_body"></h6>
-                                    
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+              <div class="col text-light  gy-1  bg-dark">
+                {% if ontime %}
+                  <i class="bi-check2-circle" style="font-size: larger; color:forestgreen;"></i>
+                {% else %}
+                  <i class="bi-x"  style="color: red;"></i>
+                {% endif %}
+              </div>       
+          
+        {% endfor %}
+        <div class="col gy-1 text-muted bg-dark ">
+          On-time Status
+        </div>  
+      </div>  
+      <div class="row ">      
+        {% for day in past_week_of_days %}
+          {% get_event day as event_day %}            
+            {% get_minlate day aroti as minlate %} 
+              <div class="col text-light bg-dark ">
+                {{ minlate }}      
+              </div>        
+          
+        {% endfor %}
+      
+          <div class="col text-muted bg-dark">
+              Minutes Late
+          </div>    
+      </div>   
+      <div class="row ">      
+        {% for day in past_week_of_days %}
+          {% get_event day as event_day %}            
+            {% get_thumbnail day aroti as thumbnail %} 
+              {% if thumbnail %}
+                <div class="col bg-dark " id=tmb{{ thumbnail.pk }} data-pic={{ MEDIA_URL }}{{ thumbnail.upload }}>
+                    <img src={{ MEDIA_URL }}{{ thumbnail.upload }} height='40px' style="border-radius: 5%;"  role="button" data-bs-toggle="modal" data-bs-target="#previewPic">
                 </div>
-            </div>
-        </div>
+              {% else %}
+                <div class="col bg-dark">
+                    <a style="color: cornsilk;">No Pic Yet</a>
+                </div>
+              {% endif %}   
+        {% endfor %}
+      
+          <div class="col text-muted bg-dark">
+              
+          </div>    
+      </div>   
+    {% endfor %}
+  {% endwith %}
+</div>
+
+     <div id="TestsTable"></div>        
+              <!-- Modal -->
+          <div class="modal fade" id="previewPic" tabindex="-1" 
+                aria-labelledby="exampleModalLabel" 
+                aria-hidden="true">
+            
+          <div class="modal-dialog">
+              <div class="modal-content" style="border-radius: 5%;">
+                  <div class="modal-header">
+                      <h5 class="modal-title" 
+                          id="exampleModalLabel">
+                          Screenshot
+                      </h5>
+                        
+                    
+                  </div>
+
+                  <div class="modal-body text-center">
+
+                      <!-- Data passed is displayed 
+                          in this part of the 
+                          modal body -->
+                      <h6 id="modal_body"></h6>
+                      
+                  </div>
+              </div>
+          </div>
+    </div>            
+  </div>                   
+        
         
     
 </div>
@@ -185,9 +153,7 @@
       $("#modal_body").html(str);
   });
 </script>
-<script type="text/javascript">
- 
-  
+<script type="text/javascript">  
 
   $(document).on("click", '[id^=pic]', function () {
      console.log("clicked!")
@@ -198,6 +164,28 @@
       $("#modal_body").html(str);
   });
 </script>
+<script>
+  let visible = 10
+
+  $(document).on("click", "#show-more", function() {
+    console.log("clicked")
+    const table = document.getElementById("eventsTable")
+    
+  } )
+
+</script>
+<!-- <script>  
+$.ajax({
+  type: 'GET',
+  url: '../data-json/',
+  success: function(response){
+    const data = JSON.parse(response.data)
+    $('#eventsTable').bootstrapTable({data:data})
+  }
+})
+</script> -->
+<script type="text/babel" src="{% static 'face_website/js/TestsTable.js' %}"></script>
+<script type="text/babel" src="{% static 'face_website/js/TableRow.js' %}"></script>
 {{ csrf_token }}
 </body>
 {% endblock %} 

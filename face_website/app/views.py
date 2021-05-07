@@ -7,6 +7,9 @@ import datetime as dt
 from datetime import datetime
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
+from django.views.generic import View
+from django.http import JsonResponse
+from django.core import serializers
 
 
 
@@ -116,3 +119,15 @@ def time_in_range(start, end, x):
 
 def success_view(request):    
     return HttpResponse("Success!")
+
+class table_view(View):
+    def get(self, *args, **kwargs):
+        print(kwargs)
+        upper = kwargs.get('num_events')
+        lower = upper - 10
+        if lower < 0:
+            qs = Event.objects.all()
+        else:
+            qs = Event.objects.all().order_by('-id')[lower:upper]
+        data = serializers.serialize('json', qs)
+        return JsonResponse({'data':data}, safe=False)
