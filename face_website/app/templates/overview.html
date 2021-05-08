@@ -30,6 +30,7 @@
 <body>
   <script type="text/javascript" src="{% static 'face_website/js/bootstrap.bundle.js' %}"></script>
 
+  
 <h1 style="color: whitesmoke;">Radha Golokananda Face Recognition</h1>
 <div class="container bg-black  "></div>
 <div class="row">
@@ -131,7 +132,12 @@
                           in this part of the 
                           modal body -->
                       <h6 id="modal_body"></h6>
+
                       
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+
                   </div>
               </div>
           </div>
@@ -145,25 +151,21 @@
 
 
   $(document).on("click", '[id^=tmb]', function () {
-     console.log("clicked!")
       const imgPhoto = document.getElementById(this.id).getAttribute('data-pic')
       var str = "<img src="+imgPhoto+" height='200px'>" 
-          
-      console.log(str)
       $("#modal_body").html(str);
   });
 </script>
-<script type="text/javascript">  
+<!-- <script type="text/javascript">  
 
   $(document).on("click", '[id^=pic]', function () {
-     console.log("clicked!")
       const imgPhoto = document.getElementById(this.id).getAttribute('data-pic')
       var str = "<img src="+imgPhoto+" height='200px'>" 
           
       
       $("#modal_body").html(str);
   });
-</script>
+</script> -->
 <script>
   let visible = 10
 

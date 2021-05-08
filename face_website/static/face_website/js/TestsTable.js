@@ -121,7 +121,6 @@ class TestsTable extends React.Component {
                                             <th>Date</th>
                                             <th>Arotik</th>
                                             <th>Face</th>
-                                            <th>More</th>
                                         </tr>
                                     </thead>
                                     <tbody>

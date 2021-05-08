@@ -122,7 +122,6 @@ def success_view(request):
 
 class table_view(View):
     def get(self, *args, **kwargs):
-        print(kwargs)
         upper = kwargs.get('num_events')
         lower = upper - 10
         if lower < 0:

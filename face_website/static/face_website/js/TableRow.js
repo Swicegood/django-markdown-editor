@@ -74,8 +74,10 @@ class TableRow extends React.Component {
                                     <window.ReactBootstrap.Modal.Title className="text-light">Screenshot</window.ReactBootstrap.Modal.Title>
                                 </window.ReactBootstrap.Modal.Header>
                                 <window.ReactBootstrap.Modal.Body className="text-center">      
-                                     <img src={imgsrc} height='200px'></img>                         
-                                    
+                                     <img src={imgsrc} height='200px'></img>
+                                     <div>                         
+                                     <window.ReactBootstrap.Button  onClick={() => { this.toggleShow() }}>Close</window.ReactBootstrap.Button>
+                                     </div>
                                 </window.ReactBootstrap.Modal.Body>
                             </window.ReactBootstrap.Modal>
                         </td>
