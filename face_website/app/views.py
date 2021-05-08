@@ -15,8 +15,7 @@ from django.core import serializers
 
 def home_redirect_view(request):
     return redirect('overview')
-
-@csrf_exempt
+    
 def overview_view(request):
    
     date_time_str = None
