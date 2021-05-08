@@ -31,25 +31,24 @@
   
 <h1 style="color: whitesmoke;">Radha Golokananda Face Recognition</h1>
 <div class="container bg-black  "></div>
-  <div class="row   justify-content-center text-light bg-black">
-    <div class="col-1">
-      <a href="../overview/?num_days={{ numdays.down }}" class="bi-arrow-left-square btn btn-secondary"></a>
-      <a href="../overview/?num_days={{ numdays.last }}"  class="bi-arrow-right-square btn btn-secondary"></a>
+    <div class="row   justify-content-center text-light bg-black">
+      <div class="col-1">
+        <a href="../overview/?num_days={{ numdays.down }}" class="bi-arrow-left-square btn btn-secondary"></a>
+        <a href="../overview/?num_days={{ numdays.last }}"  class="bi-arrow-right-square btn btn-secondary"></a>
+      </div>
     </div>
-  </div>
     <div class="row">
       {% load event_tag %}
         <div class="row mb-0  text-light bg-black">
         {% for day in past_week_of_days %}
           {% get_event day as event_day %}
-            
             <div class="gy-1 col bg-secondary mb-0">
               {{ event_day }}
             </div>     
         {% endfor %}   
-          <div class="mb-0 col gy-1 bg-secondary mb-0 gx-5 ">
-            Indicates:
-          </div>
+            <div class="mb-0 col gy-1 bg-secondary mb-0 gx-5 ">
+              Indicates:
+            </div>
         </div>
       {% with "Mangal,Darshan,Noon,Four O'clock,Evening" as arotiks %}
         {% for aroti in arotiks|split %}
@@ -112,7 +111,7 @@
         {% endfor %}
       {% endwith %}
     </div>
-
+  </div>
 <div id="TestsTable"></div>        
               <!-- Modal -->
       <div class="modal fade" id="previewPic" tabindex="-1" 
@@ -134,14 +133,14 @@
                           modal body -->
                       <h6 id="modal_body"></h6>
                   </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                  </div>
             </div>
-        </div>
-    </div>            
-  </div>     
-</div>
+          </div>
+     </div>            
+</div>     
+
 <script type="text/javascript">  
 
 
