@@ -18,7 +18,7 @@ def home_redirect_view(request):
 
 @csrf_exempt
 def overview_view(request):
-    some_day_last_week = timezone.now().date() - dt.timedelta(days=6)
+   
     date_time_str = None
     if request.method == 'POST':
         event = request.POST.copy() 
@@ -35,12 +35,15 @@ def overview_view(request):
             # file is saved
             form.save()
             return HttpResponseRedirect('/success/')
-
+    num_days = request.GET.get('num_days',False)
+    if (not num_days) or (int(num_days) < 6): num_days=6
+    begin_day = timezone.now().date() - dt.timedelta(days=int(num_days))
+    end_day = begin_day + dt.timedelta(days=6)
     all_events = Event.objects.all()
-    past_week_events = all_events.filter(date__gte=some_day_last_week)
+    past_week_events = all_events.filter(date__gte=begin_day,date__lt=end_day)
     past_week_of_days = break_into_days(past_week_events)
-    return render(request, 'overview.html', {'all_events': all_events, 'past_week_of_days':past_week_of_days})
-  
+    numdays = {'down': int(num_days)+1, 'last': int(num_days)-1}
+    return render(request, 'overview.html', {'all_events': all_events, 'past_week_of_days':past_week_of_days, 'numdays':numdays})  
 
 def break_into_days(past_week_events):
     past_week_of_days = []

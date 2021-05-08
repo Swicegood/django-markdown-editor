@@ -31,81 +31,87 @@
   
 <h1 style="color: whitesmoke;">Radha Golokananda Face Recognition</h1>
 <div class="container bg-black  "></div>
-<div class="row">
-  {% load event_tag %}
-    <div class="row mb-0  text-light bg-black">
-    {% for day in past_week_of_days %}
-      {% get_event day as event_day %}
-        
-        <div class="gy-1 col bg-secondary mb-0">
-          {{ event_day }}
-        </div>     
-    {% endfor %}   
-      <div class="mb-0 col gy-1 bg-secondary mb-0 gx-5 ">
-        Indicates:
-      </div>
+  <div class="row  text-light bg-black">
+    <div class="col">
+      <a href="../overview/?num_days={{ numdays.down }}" class="bi-arrow-left-square btn btn-secondary"></a>
+      <a href="../overview/?num_days={{ numdays.last }}"  class="bi-arrow-right-square btn btn-secondary"></a>
     </div>
-  {% with "Mangal,Darshan,Noon,Four O'clock,Evening" as arotiks %}
-    {% for aroti in arotiks|split %}
-      <div class="row" >
-          <div class="text-center text-muted bg-dark gy-1 bg-secondary">
-            <h6>{{ aroti }}</h6>
-          </div>
-      </div>       
-      <div class="row bg-black">
-        {% for day in past_week_of_days %} 
+  </div>
+    <div class="row">
+      {% load event_tag %}
+        <div class="row mb-0  text-light bg-black">
+        {% for day in past_week_of_days %}
           {% get_event day as event_day %}
-            {% check_if_event_ontime day aroti as ontime %}
             
-              <div class="col text-light  gy-1  bg-dark">
-                {% if ontime %}
-                  <i class="bi-check2-circle" style="font-size: larger; color:forestgreen;"></i>
-                {% else %}
-                  <i class="bi-x"  style="color: red;"></i>
-                {% endif %}
-              </div>       
-          
-        {% endfor %}
-        <div class="col gy-1 text-muted bg-dark ">
-          On-time Status
-        </div>  
-      </div>  
-      <div class="row ">      
-        {% for day in past_week_of_days %}
-          {% get_event day as event_day %}            
-            {% get_minlate day aroti as minlate %} 
-              <div class="col text-light bg-dark ">
-                {{ minlate }}      
-              </div>        
-          
-        {% endfor %}
-      
-          <div class="col text-muted bg-dark">
-              Minutes Late
-          </div>    
-      </div>   
-      <div class="row ">      
-        {% for day in past_week_of_days %}
-          {% get_event day as event_day %}            
-            {% get_thumbnail day aroti as thumbnail %} 
-              {% if thumbnail %}
-                <div class="col bg-dark " id=tmb{{ thumbnail.pk }} data-pic={{ MEDIA_URL }}{{ thumbnail.upload }}>
-                    <img src={{ MEDIA_URL }}{{ thumbnail.upload }} height='40px' style="border-radius: 5%;"  role="button" data-bs-toggle="modal" data-bs-target="#previewPic">
-                </div>
-              {% else %}
-                <div class="col bg-dark">
-                    <a style="color: cornsilk;">No Pic Yet</a>
-                </div>
-              {% endif %}   
-        {% endfor %}
-      
-          <div class="col text-muted bg-dark">
+            <div class="gy-1 col bg-secondary mb-0">
+              {{ event_day }}
+            </div>     
+        {% endfor %}   
+          <div class="mb-0 col gy-1 bg-secondary mb-0 gx-5 ">
+            Indicates:
+          </div>
+        </div>
+      {% with "Mangal,Darshan,Noon,Four O'clock,Evening" as arotiks %}
+        {% for aroti in arotiks|split %}
+          <div class="row" >
+              <div class="text-center text-muted bg-dark gy-1 bg-secondary">
+                <h6>{{ aroti }}</h6>
+              </div>
+          </div>       
+          <div class="row bg-black">
+            {% for day in past_week_of_days %} 
+              {% get_event day as event_day %}
+                {% check_if_event_ontime day aroti as ontime %}
+                
+                  <div class="col text-light  gy-1  bg-dark">
+                    {% if ontime %}
+                      <i class="bi-check2-circle" style="font-size: larger; color:forestgreen;"></i>
+                    {% else %}
+                      <i class="bi-x"  style="color: red;"></i>
+                    {% endif %}
+                  </div>       
               
-          </div>    
-      </div>   
-    {% endfor %}
-  {% endwith %}
-</div>
+            {% endfor %}
+            <div class="col gy-1 text-muted bg-dark ">
+              On-time Status
+            </div>  
+          </div>  
+          <div class="row ">      
+            {% for day in past_week_of_days %}
+              {% get_event day as event_day %}            
+                {% get_minlate day aroti as minlate %} 
+                  <div class="col text-light bg-dark ">
+                    {{ minlate }}      
+                  </div>        
+              
+            {% endfor %}
+          
+              <div class="col text-muted bg-dark">
+                  Minutes Late
+              </div>    
+          </div>   
+          <div class="row ">      
+            {% for day in past_week_of_days %}
+              {% get_event day as event_day %}            
+                {% get_thumbnail day aroti as thumbnail %} 
+                  {% if thumbnail %}
+                    <div class="col bg-dark " id=tmb{{ thumbnail.pk }} data-pic={{ MEDIA_URL }}{{ thumbnail.upload }}>
+                        <img src={{ MEDIA_URL }}{{ thumbnail.upload }} height='40px' style="border-radius: 5%;"  role="button" data-bs-toggle="modal" data-bs-target="#previewPic">
+                    </div>
+                  {% else %}
+                    <div class="col bg-dark">
+                        <a style="color: cornsilk;">No Pic Yet</a>
+                    </div>
+                  {% endif %}   
+            {% endfor %}
+          
+              <div class="col text-muted bg-dark">
+                  
+              </div>    
+          </div>   
+        {% endfor %}
+      {% endwith %}
+    </div>
 
 <div id="TestsTable"></div>        
               <!-- Modal -->
@@ -145,6 +151,7 @@
       $("#modal_body").html(str);
   });
 </script>
+
 <script type="text/babel" src="{% static 'face_website/js/TestsTable.js' %}"></script>
 <script type="text/babel" src="{% static 'face_website/js/TableRow.js' %}"></script>
 {{ csrf_token }}
