@@ -14,9 +14,7 @@
    <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
    <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-   <script
-  src="https://unpkg.com/react-bootstrap@next/dist/react-bootstrap.min.js"
-  crossorigin></script>
+   <script src="https://unpkg.com/react-bootstrap@next/dist/react-bootstrap.min.js"  crossorigin></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css">
   <link href="https://unpkg.com/bootstrap-table@1.18.3/dist/bootstrap-table.min.css" rel="stylesheet">
   <link href="{% static 'face_website/css/bootstrap.min.css' %}" type="text/css" media="all" rel="stylesheet" />
@@ -109,9 +107,9 @@
   {% endwith %}
 </div>
 
-     <div id="TestsTable"></div>        
+<div id="TestsTable"></div>        
               <!-- Modal -->
-          <div class="modal fade" id="previewPic" tabindex="-1" 
+      <div class="modal fade" id="previewPic" tabindex="-1" 
                 aria-labelledby="exampleModalLabel" 
                 aria-hidden="true">
             
@@ -122,30 +120,21 @@
                           id="exampleModalLabel">
                           Screenshot
                       </h5>
-                        
-                    
                   </div>
 
                   <div class="modal-body text-center">
-
                       <!-- Data passed is displayed 
                           in this part of the 
                           modal body -->
                       <h6 id="modal_body"></h6>
-
-                      
                   </div>
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-
-                  </div>
-              </div>
-          </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
     </div>            
-  </div>                   
-        
-        
-    
+  </div>     
 </div>
 <script type="text/javascript">  
 
@@ -156,36 +145,6 @@
       $("#modal_body").html(str);
   });
 </script>
-<!-- <script type="text/javascript">  
-
-  $(document).on("click", '[id^=pic]', function () {
-      const imgPhoto = document.getElementById(this.id).getAttribute('data-pic')
-      var str = "<img src="+imgPhoto+" height='200px'>" 
-          
-      
-      $("#modal_body").html(str);
-  });
-</script> -->
-<script>
-  let visible = 10
-
-  $(document).on("click", "#show-more", function() {
-    console.log("clicked")
-    const table = document.getElementById("eventsTable")
-    
-  } )
-
-</script>
-<!-- <script>  
-$.ajax({
-  type: 'GET',
-  url: '../data-json/',
-  success: function(response){
-    const data = JSON.parse(response.data)
-    $('#eventsTable').bootstrapTable({data:data})
-  }
-})
-</script> -->
 <script type="text/babel" src="{% static 'face_website/js/TestsTable.js' %}"></script>
 <script type="text/babel" src="{% static 'face_website/js/TableRow.js' %}"></script>
 {{ csrf_token }}
