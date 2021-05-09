@@ -10,8 +10,9 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import View
 from django.http import JsonResponse
 from django.core import serializers
+import os
 
-
+keep_days = 60
 
 def home_redirect_view(request):
     return redirect('overview')
@@ -31,10 +32,13 @@ def overview_view(request):
         event['ontime']=is_arotik_ontime(date_time_obj,aroti)
         event['minlate']=minutes_late(date_time_obj,aroti)
         form = EventForm(event, request.FILES)
-        if form.is_valid():
+        delete_old_events()
+        if aroti and form.is_valid():
             # file is saved
             form.save()
             return HttpResponseRedirect('/success/')
+        else:
+            return HttpResponseRedirect('/failure/')
     num_days = request.GET.get('num_days',False)
     if (not num_days) or (int(num_days) < 6): num_days=6
     begin_day = timezone.now().date() - dt.timedelta(days=int(num_days))
@@ -72,7 +76,7 @@ def minutes_late(date_time_obj, aroti):
     if aroti=="Noon":
         atime = dt.time(12,30,0)
     if aroti=="Four O'clock":
-        if date_time_obj.weekday() == 6:
+        if date_time_obj.weekday() == 0:
             atime = dt.time(16,0,0)
         else:
             atime = dt.time(16,15,0)
@@ -110,7 +114,7 @@ def get_arotik(date_time_str):
     if time_in_range(start,end,x):
         return "Evening"
     else:
-        return "Unknown"
+        return None
 
 
 def time_in_range(start, end, x):
@@ -123,6 +127,10 @@ def time_in_range(start, end, x):
 def success_view(request):    
     return HttpResponse("Success!")
 
+def failure_view(request):    
+    return HttpResponse("Data not valid")
+
+
 class table_view(View):
     def get(self, *args, **kwargs):
         upper = kwargs.get('num_events')
@@ -133,3 +141,16 @@ class table_view(View):
             qs = Event.objects.all().order_by('-id')[lower:upper]
         data = serializers.serialize('json', qs)
         return JsonResponse({'data':data}, safe=False)
+
+def delete_old_events():
+    now = timezone.now()
+    cutoff = now.date() - dt.timedelta(days=int(keep_days))
+    Event.objects.filter(date__lte=cutoff).delete()
+    
+    path = r"media/screenshots"
+
+    for f in os.listdir(path):
+        f = os.path.join(path, f)
+        if os.stat(f).st_mtime < now.second - keep_days * 86400:
+            if os.path.isfile(f):
+                os.remove(f)
