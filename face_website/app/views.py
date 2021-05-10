@@ -11,6 +11,7 @@ from django.views.generic import View
 from django.http import JsonResponse
 from django.core import serializers
 import os
+from app import discordclient
 
 keep_days = 60
 
@@ -30,12 +31,13 @@ def overview_view(request):
         event['date']=date_time_obj
         event['arotik']=aroti
         event['ontime']=is_arotik_ontime(date_time_obj,aroti)
-        event['minlate']=minutes_late(date_time_obj,aroti)
+        event['minlate']=minutes_late(date_time_obj,aroti)        
         form = EventForm(event, request.FILES)
         delete_old_events()
         if aroti and form.is_valid():
             # file is saved
             form.save()
+            notify(aroti)
             return HttpResponseRedirect('/success/')
         else:
             return HttpResponseRedirect('/failure/')
@@ -154,3 +156,22 @@ def delete_old_events():
         if os.stat(f).st_mtime < now.second - keep_days * 86400:
             if os.path.isfile(f):
                 os.remove(f)
+
+def notify(aroti):
+    today = timezone.now()
+    todays_events = Event.objects.filter(date__date=today.date())
+    myevents =  [event for event in todays_events if (event.arotik==aroti)]
+    upload = None
+    message = None
+    ttime = "No Data"
+    if myevents and (len(myevents) < 2):
+        if myevents[0].ontime:
+            message='Arotik ontime!'
+        else:
+            message='Arotik is late!'
+        upload = 'media/'+myevents[0].upload.name
+        ttime = 'Detection triggered at '+ myevents[0].date.strftime('%Y-%m-%dT%H:%M:%S')
+        discordclient.send_discord(upload, message, ttime)
+    else:
+        return False
+    

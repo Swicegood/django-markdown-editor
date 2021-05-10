@@ -4,3 +4,4 @@ requests
 martor
 gunicorn
 mysqlclient==2.0.0
+discord.py
