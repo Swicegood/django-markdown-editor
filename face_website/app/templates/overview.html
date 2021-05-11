@@ -28,8 +28,24 @@
 <body>
   <script type="text/javascript" src="{% static 'face_website/js/bootstrap.bundle.js' %}"></script>
 
-  
-<h1 style="color: whitesmoke;">Radha Golokananda Face Recognition</h1>
+<div class="header-row" id="header-row" style="padding: 0px;  height:150px;">
+    <!-- container-fluid is the same as container but spans a wider viewport, 
+it still has padding though so you need to remove this either by adding 
+another class with no padding or inline as I did below -->
+  <div class="container-fluid" style="padding: 0px;">
+    <div class="row"> 
+      <!-- You originally has it set up for two columns, remove the second 
+  column as it is unneeded and set the first to always span all 12 columns 
+  even when at its smallest (xs). Set the overflow to hidden so no matter 
+  the height of your image it will never show outside this div-->
+      <div class="col-12"> 
+      <!-- place your image here -->
+            <img src="{% static 'img/banner.png' %}"" alt="Radha Golokananda" style="width: 100%;">
+          
+      </div>     
+    </div>
+  </div>
+</div>
 <div class="container bg-black  "></div>
     <div class="row   justify-content-center text-light bg-black">
       <div class="col-1">
