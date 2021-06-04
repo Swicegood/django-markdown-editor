@@ -86,6 +86,7 @@ DATABASES = {
         'PASSWORD': 'facepass',
         'HOST': '192.168.0.67',
         'PORT': '3306',
+        'TIME_ZONE': 'America/New_York',
     }
 }
 
