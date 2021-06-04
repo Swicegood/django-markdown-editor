@@ -78,7 +78,7 @@ def minutes_late(date_time_obj, aroti):
     if aroti=="Noon":
         atime = dt.time(12,30,0)
     if aroti=="Four O'clock":
-        if date_time_obj.weekday() == 0:
+        if date_time_obj.weekday() == 6:
             atime = dt.time(16,0,0)
         else:
             atime = dt.time(16,15,0)
