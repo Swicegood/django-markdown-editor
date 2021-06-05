@@ -47,14 +47,13 @@ def overview_view(request):
     end_day = begin_day + dt.timedelta(days=7)
     all_events = Event.objects.all()
     past_week_events = all_events.filter(date__gte=begin_day,date__lt=end_day)
-    past_week_of_days = break_into_days(past_week_events)
+    past_week_of_days = break_into_days(past_week_events, begin_day)
     numdays = {'down': int(num_days)+1, 'last': int(num_days)-1}
     return render(request, 'overview.html', {'all_events': all_events, 'past_week_of_days':past_week_of_days, 'numdays':numdays})  
 
-def break_into_days(past_week_events):
+def break_into_days(past_week_events, start):    
     past_week_of_days = []
-    start = past_week_events[0].date
-    end = past_week_events[0].date
+    end = start
     for i in range(7):
         end += dt.timedelta(days=1)
         day = past_week_events.filter(date__gte=start, date__lt=end)
