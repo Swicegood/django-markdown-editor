@@ -2,8 +2,9 @@
 
 # FROM directive instructing base image to build upon
 FROM python:3.7-buster
-RUN apt-get update && apt-get install nginx vim default-libmysqlclient-dev -y --no-install-recommends
+RUN apt-get update && apt-get install nginx vim cron default-libmysqlclient-dev -y --no-install-recommends
 COPY nginx.default /etc/nginx/sites-available/default
+COPY crontab /etc/
 RUN ln -sf /dev/stdout /var/log/nginx/access.log \
     && ln -sf /dev/stderr /var/log/nginx/error.log
 RUN mkdir -p /opt/app

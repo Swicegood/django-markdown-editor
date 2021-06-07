@@ -12,6 +12,7 @@ from django.http import JsonResponse
 from django.core import serializers
 import os
 from app import discordclient
+import pytz
 
 keep_days = 60
 
@@ -21,6 +22,7 @@ def home_redirect_view(request):
 @csrf_exempt
 def overview_view(request):
    
+    warn = False
     date_time_str = None
     if request.method == 'POST':
         event = request.POST.copy() 
@@ -37,11 +39,17 @@ def overview_view(request):
         if aroti and form.is_valid():
             # file is saved
             form.save()
-            notify(aroti)
+            notify(aroti, warn)
             return HttpResponseRedirect('/success/')
         else:
             return HttpResponseRedirect('/failure/')
     num_days = request.GET.get('num_days',False)
+    if num_days == "warning":
+        warn = True
+        now_str = "2021-06-07T04:35:00"
+ #       now_str = timezone.now().strftime('%Y-%m-%dT%H:%M:%S')
+        notify(get_arotik(now_str), warn)
+        num_days = 6
     if (not num_days) or (int(num_days) < 6): num_days=6
     begin_day = timezone.now().date() - dt.timedelta(days=int(num_days))
     end_day = begin_day + dt.timedelta(days=7)
@@ -156,7 +164,7 @@ def delete_old_events():
             if os.path.isfile(f):
                 os.remove(f)
 
-def notify(aroti):
+def notify(aroti, warn):
     today = timezone.now()
     todays_events = Event.objects.filter(date__date=today.date())
     myevents =  [event for event in todays_events if (event.arotik==aroti)]
@@ -171,6 +179,8 @@ def notify(aroti):
         upload = 'media/'+myevents[0].upload.name
         ttime = 'Detection triggered at '+ myevents[0].date.strftime('%Y-%m-%dT%H:%M:%S')
         discordclient.send_discord(upload, message, ttime)
-    else:
-        return False
+    elif not myevents and warn:
+        message='Arotik is late!'
+        ttime = 'No Detection triggered at '+ today.astimezone(pytz.timezone('America/New_York')).strftime('%Y-%m-%dT%H:%M:%S')
+        discordclient.send_discord(upload, message, ttime)
     
