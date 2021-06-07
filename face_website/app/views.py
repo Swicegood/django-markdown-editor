@@ -46,8 +46,7 @@ def overview_view(request):
     num_days = request.GET.get('num_days',False)
     if num_days == "warning":
         warn = True
-        now_str = "2021-06-07T04:35:00"
- #       now_str = timezone.now().strftime('%Y-%m-%dT%H:%M:%S')
+        now_str = timezone.now().strftime('%Y-%m-%dT%H:%M:%S')
         notify(get_arotik(now_str), warn)
         num_days = 6
     if (not num_days) or (int(num_days) < 6): num_days=6
@@ -171,16 +170,16 @@ def notify(aroti, warn):
     upload = None
     message = None
     ttime = "No Data"
-    if myevents and (len(myevents) < 2):
+    if myevents and (len(myevents) < 2) and not warn:
         if myevents[0].ontime:
-            message='Arotik ontime!'
+            message=aroti+' arotik ontime!'
         else:
-            message='Arotik is late!'
+            message=aroti+' arotik is late!'
         upload = 'media/'+myevents[0].upload.name
         ttime = 'Detection triggered at '+ myevents[0].date.strftime('%Y-%m-%dT%H:%M:%S')
         discordclient.send_discord(upload, message, ttime)
-    elif not myevents and warn:
-        message='Arotik is late!'
+    elif not myevents and warn and aroti:
+        message=aroti+' arotik is late!'
         ttime = 'No Detection triggered at '+ today.astimezone(pytz.timezone('America/New_York')).strftime('%Y-%m-%dT%H:%M:%S')
         discordclient.send_discord(upload, message, ttime)
     
