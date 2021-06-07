@@ -46,7 +46,7 @@ def overview_view(request):
     num_days = request.GET.get('num_days',False)
     if num_days == "warning":
         warn = True
-        now_str = timezone.now().strftime('%Y-%m-%dT%H:%M:%S')
+        now_str = timezone.now().astimezone(pytz.timezone('America/New_York')).strftime('%Y-%m-%dT%H:%M:%S')
         notify(get_arotik(now_str), warn)
         num_days = 6
     if (not num_days) or (int(num_days) < 6): num_days=6
