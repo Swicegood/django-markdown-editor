@@ -19,9 +19,9 @@ PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 25 6	* * *	root	test -x /usr/sbin/anacron || ( cd / && run-parts --report /etc/cron.daily )
 47 6	* * 7	root	test -x /usr/sbin/anacron || ( cd / && run-parts --report /etc/cron.weekly )
 52 6	1 * *	root	test -x /usr/sbin/anacron || ( cd / && run-parts --report /etc/cron.monthly )
-35 4    * * *   root    curl "http://192.168.0.67:8020/overview/?num_days=warning"
-20 7    * * *   root    curl "http://192.168.0.67:8020/overview/?num_days=warning"
-35 12    * * *   root    curl "http://192.168.0.67:8020/overview/?num_days=warning"
-20 16    * * *   root    curl "http://192.168.0.67:8020/overview/?num_days=warning"
-05 19    * * *   root    curl "http://192.168.0.67:8020/overview/?num_days=warning"
+35 4    * * *   curl "http://192.168.0.67:8020/overview/?num_days=warning"
+20 7    * * *   curl "http://192.168.0.67:8020/overview/?num_days=warning"
+35 12    * * *  curl "http://192.168.0.67:8020/overview/?num_days=warning"
+20 16    * * *  curl "http://192.168.0.67:8020/overview/?num_days=warning"
+05 19    * * *  curl "http://192.168.0.67:8020/overview/?num_days=warning"
 
