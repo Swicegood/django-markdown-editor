@@ -150,11 +150,26 @@ another class with no padding or inline as I did below -->
                       <h6 id="modal_body"></h6>
                   </div>
                   <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#fullsizePic" id="fullSize">Full Sized</button>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                   </div>
             </div>
           </div>
-     </div>            
+     </div>
+     <div class="modal fade" id="fullsizePic" tabindex="-1" 
+                aria-labelledby="exampleModalLabel" 
+                aria-hidden="true">
+      <div class="modal-dialog modal-xl">   
+          <div class="modal-conent">
+            <div class="modal-body text-center">
+              <!-- Data passed is displayed 
+                  in this part of the 
+                  modal body -->
+              <h6 id="modal_body_full"></h6>
+            </div>
+          </div>        
+      </div>
+     </div>
 </div>     
 
 <script type="text/javascript">  
@@ -162,9 +177,14 @@ another class with no padding or inline as I did below -->
 
   $(document).on("click", '[id^=tmb]', function () {
       const imgPhoto = document.getElementById(this.id).getAttribute('data-pic')
-      var str = "<img src="+imgPhoto+" height='200px'>" 
+      var str = "<img src="+imgPhoto+" height='200px'>"
+      var str2 = "<img src="+imgPhoto+">" 
       $("#modal_body").html(str);
+      $("#modal_body_full").html(str2);
   });
+
+
+
 </script>
 
 <script type="text/babel" src="{% static 'face_website/js/TestsTable.js' %}"></script>
