@@ -10,6 +10,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import View
 from django.http import JsonResponse
 from django.core import serializers
+from django.utils.timezone import now
 import os
 from app import discordclient
 import pytz
@@ -151,17 +152,21 @@ class table_view(View):
         return JsonResponse({'data':data}, safe=False)
 
 def delete_old_events():
-    now = timezone.now()
-    cutoff = now.date() - dt.timedelta(days=int(keep_days))
+    current_time = now()  # Get the current time
+    cutoff = current_time.date() - dt.timedelta(days=int(keep_days))
     Event.objects.filter(date__lte=cutoff).delete()
-    
+
     path = r"media/screenshots"
+    # Convert the current time to UTC before getting the timestamp
+    current_time_utc = current_time.astimezone(pytz.utc)
+    current_timestamp = current_time_utc.timestamp()
 
     for f in os.listdir(path):
         f = os.path.join(path, f)
-        if os.stat(f).st_mtime < now.second - keep_days * 86400:
+        if os.path.getmtime(f) < current_timestamp - keep_days * 86400:
             if os.path.isfile(f):
                 os.remove(f)
+
 
 def notify(aroti, warn):
     today = timezone.now()
